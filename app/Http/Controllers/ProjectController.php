@@ -17,4 +17,15 @@ class ProjectController extends Controller
         return view('project', compact('projects', 'page'));
 
     }
+
+    public function show(Request $request, string $slug){
+
+        $project = Project::where('slug', $slug)->first();
+
+        $page = Page::where('slug', 'projects')->first();
+
+        return view('project_detail', compact('project', 'page'));
+
+    }
+    
 }
