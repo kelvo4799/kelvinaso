@@ -8,7 +8,7 @@
 
 <x-main-layout :page="$page" :settings="$settings ?? ['site_name' => 'Portfolio']">
 
-    <section class="about-grid">
+    <section class="hero" style="position: relative;">
 
         <x-profile-card-component :profile="$profile" />
 

@@ -2,8 +2,8 @@
 
 
     <section class="hero" style="position: relative;">
-      <div class="bg-glow"></div>
-      <div class="bg-glow-2"></div>
+      
+      
 
       <aside class="hero-aside animate-up delay-1">
         <div class="card profile hero-card">

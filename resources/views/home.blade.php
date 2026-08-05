@@ -8,8 +8,6 @@
 
 <x-main-layout :page="$page" :settings="$settings ?? ['site_name' => 'Portfolio']">
     <section class="hero" style="position: relative;">
-        <div class="bg-glow"></div>
-        <div class="bg-glow-2"></div>
 
         <x-profile-card-component :profile="$profile" />
 
