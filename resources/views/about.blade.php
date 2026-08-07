@@ -19,13 +19,14 @@
         <div style="display:flex; flex-direction:column; gap:4rem;">
             <div class="card hero-card">
                 <p class="eyebrow">Biography</p>
-                <h1 style="margin-top:1.25rem;">{{ $profile->bio_header ?? '' }}</h1>
+                <h1 style="margin-top:1.25rem;">{{ $profile->bio_header ?? '' }} <span class="text-gradient">read the data</span> </h1>
                 <div
                     style="margin-top:2rem; color:var(--muted); font-size:1.1rem; line-height:1.7; max-width:60ch; display:flex; flex-direction:column; gap:1.25rem;">
                     <p>{{ $profile->bio }}</p>
                     <p>{{ $$profile->bio_extra ?? '' }}</p>
                 </div>
             </div>
+            
 
 
 
@@ -35,32 +36,21 @@
                 <h2 style="margin-bottom:2rem;">Skills</h2>
                 <div class="skills-grid">
 
-
                         @foreach ($stacks as $stack => $values)
                             <div class="card skill-card">
                                 <p class="eyebrow">{{ $stack }}</p>
                                 <ul>
                                     @foreach ($values as $value)
-                                        <li>{{ $value['name'] }} - {{ $value['level'] ?? '' }}</li>
+                                        <li>{{ $value['name'] }} <span class="skill-level {{ strtolower($value['level'] ?? 'intermidiate') }}">{{ $value['level'] ?? 'intermidiate' }}</span></li>
                                     @endforeach
                                     
                                 </ul>
                             </div>
                         @endforeach
-                            
-                        
-                            
-
-
-
-
-
-
-                    
-
 
                 </div>
             </section>
+
             @php
                 $ex = false;
             @endphp
@@ -83,19 +73,6 @@
     </section>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </x-main-layout>
+
+

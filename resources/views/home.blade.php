@@ -36,7 +36,7 @@
                 <div class="chips">
                     @if ($stacks->isNotEmpty())
                         @foreach ($stacks as $stack)
-                            <span class="chip"><img src="{{ $stack->image ? $stack->image : "https://cdn.simpleicons.org/$stack->name" }}" alt="{{ $stack->name }}"
+                            <span class="chip"><img src="{{ $stack->image ? $stack->image : "https://cdn.simpleicons.org/$stack->name/9ca3af" }}" alt="{{ $stack->name }}"
                                     width="24" height="24" style="margin-bottom:0.25rem;">{{ $stack->name }}</span>
                         @endforeach
 
@@ -48,6 +48,9 @@
                     
                 </div>
             </div>
+
+
+            
 
 
         </div>

@@ -11,7 +11,7 @@
             </div>
             <div class="profile-socials">
                 @foreach ($profile->social_links as $social => $url)
-                    <a href="{{ $url }}" aria-label="{{ $social }}"><img class="profile-name" src="https://cdn.simpleicons.org/{{ $social }}/000fff" alt="{{ $social }}" width="20" height="20"></a>
+                    <a href="{{ $url }}" aria-label="{{ $social }}"><img class="profile-name" src="https://cdn.simpleicons.org/{{ $social }}/9ca3af" alt="{{ $social }}" width="20" height="20"></a>
                 @endforeach
 
             </div>

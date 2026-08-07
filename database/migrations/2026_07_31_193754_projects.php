@@ -18,6 +18,11 @@ return new class extends Migration
             $table->text('description');
             $table->string('image')->nullable();
             $table->json('tech_stack')->nullable();
+            $table->string('role')->nullable()->default('Frontend Developer');
+            $table->year('year')->nullable()->default(now()->year);
+            $table->string('industry')->nullable()->default('Technology');
+            $table->string('client')->nullable()->default('Self');
+            $table->string('client_url')->nullable();
             $table->string('github_url')->nullable();
             $table->enum('project_type', ['web', 'mobile', 'desktop', 'other'])->default('web');
             $table->enum('view_type', ['live', 'preview'])->default('live');
@@ -25,6 +30,9 @@ return new class extends Migration
             $table->boolean('featured')->default(false);
             $table->integer('order')->default(0);
             $table->boolean('is_active')->default(true);
+            $table->json('metrics')->nullable();
+            $table->text('other_details')->nullable();
+            $table->json('meta')->nullable();
             $table->timestamps();
         });
     }

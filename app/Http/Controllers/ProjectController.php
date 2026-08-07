@@ -24,6 +24,8 @@ class ProjectController extends Controller
 
         $page = Page::where('slug', 'projects')->first();
 
+        dd($project);
+
         return view('project_detail', compact('project', 'page'));
 
     }

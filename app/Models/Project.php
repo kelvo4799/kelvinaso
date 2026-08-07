@@ -6,11 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
+
     protected $fillable = [
         'title',
         'slug',
         'description',
         'image',
+        'role',
+        'year',
+        'industry',
+        'client',
+        'client_url',
         'tech_stack',
         'github_url',
         'project_type',
@@ -18,13 +24,19 @@ class Project extends Model
         'live_url',
         'featured',
         'order',
-        'is_active'
+        'is_active',
+        'metrics',
+        'other_details',
+        'meta'
     ];
 
     protected function casts(): array
     {
         return [
             'tech_stack' => 'json',
+            'metrics' => 'json',
+            'other_details' => 'json',
+            'meta' => 'json'
         ];
     }
 

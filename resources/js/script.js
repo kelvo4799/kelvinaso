@@ -233,3 +233,56 @@ window.addEventListener('scroll', () => {
   }
   lastScrollY = currentScrollY;
 });
+
+
+// Preview Modal Logic
+const previewBtns = document.querySelectorAll('[data-preview]');
+if (previewBtns.length > 0) {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Close Preview">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+      <div class="modal-body"></div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  const closeBtn = overlay.querySelector('.modal-close');
+  const modalBody = overlay.querySelector('.modal-body');
+
+  const closeModal = () => {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    // Clear out the modal content after transition to stop background iframes
+    setTimeout(() => { modalBody.innerHTML = ''; }, 300);
+  };
+
+  previewBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const src = btn.getAttribute('data-preview');
+      if (src) {
+        // Detect if URL is an image based on extension
+        const isImage = /\.(jpeg|jpg|gif|png|webp|svg)(\?.*)?$/i.test(src);
+        if (isImage) {
+          modalBody.innerHTML = `<img src="${src}" alt="Project Preview">`;
+        } else {
+          modalBody.innerHTML = `<iframe src="${src}" style="width: 100%; height: 80vh; display: block; border-radius: var(--radius-xl); border: none;"></iframe>`;
+        }
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+  });
+}

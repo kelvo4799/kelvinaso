@@ -390,13 +390,19 @@ $projects = [
         'title' => 'Keviloq Portfolio',
         'slug' => 'keviloq-portfolio',
         'description' => 'A modern portfolio website built with Laravel, Tailwind CSS, and MySQL.',
-        'image' => 'projects/portfolio.jpg',
-        'tech_stack' => ['Laravel', 'PHP', 'MySQL', 'Tailwind CSS'],
+        'image' => 'https://ng.jumia.is/unsafe/fit-in/680x680/filters:fill(white)/product/49/3146104/1.jpg?8685',
+        'tech_stack' => ['Laravel', 'PHP', 'MySQL', 'Tailwind CSS', 'Alozie Akpa Amu'],
         'github_url' => 'https://github.com/username/keviloq-portfolio',
         'project_type' => 'web',
         'view_type' => 'live',
         'live_url' => 'https://portfolio.example.com',
         'featured' => true,
+        'metrics' => [
+            'Avg response' => '42ms',
+            'Throughput' => '8k rps',
+            'Test coverage' => '94%',
+            'Status' => 'Good'
+        ],
         'order' => 1,
         'is_active' => true,
     ],
@@ -411,6 +417,16 @@ $projects = [
         'view_type' => 'live',
         'live_url' => 'https://shop.example.com',
         'featured' => true,
+        'metrics' => [
+            'Avg response' => '42ms',
+            'Throughput' => '8k rps',
+            'Test coverage' => '94%',
+            'Status' => 'Good'
+        ],
+        
+        'other_details' => [
+        ],
+
         'order' => 2,
         'is_active' => true,
     ],
@@ -425,6 +441,12 @@ $projects = [
         'view_type' => 'preview',
         'live_url' => null,
         'featured' => false,
+        'metrics' => [
+            'Avg response' => '42ms',
+            'Throughput' => '8k rps',
+            'Test coverage' => '94%',
+            'Status' => 'Good'
+        ],
         'order' => 3,
         'is_active' => true,
     ],
@@ -480,7 +502,7 @@ $projects = [
 
         'featured' => true,
 
-        'order' => 1,
+        'order' => 6,
 
         'is_active' => true,
 
@@ -508,7 +530,7 @@ $projects = [
 
         'featured' => true,
 
-        'order' => 2,
+        'order' => 7,
 
         'is_active' => true,
 
@@ -536,7 +558,7 @@ $projects = [
 
         'featured' => true,
 
-        'order' => 3,
+        'order' => 8,
 
         'is_active' => true,
 
@@ -564,7 +586,7 @@ $projects = [
 
         'featured' => false,
 
-        'order' => 4,
+        'order' => 9,
 
         'is_active' => true,
 
@@ -592,7 +614,7 @@ $projects = [
 
         'featured' => false,
 
-        'order' => 5,
+        'order' => 10,
 
         'is_active' => true,
 
@@ -620,7 +642,7 @@ $projects = [
 
         'featured' => false,
 
-        'order' => 6,
+        'order' => 11,
 
         'is_active' => true,
 
