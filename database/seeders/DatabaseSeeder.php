@@ -8,6 +8,7 @@ use App\Models\Project;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use Database\Seeders\AuthPageSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,6 +19,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+
+        $this->call([
+        AuthPageSeeder::class,
+    ]);
+
         $users = User::create([
             'name' => 'Admin',
             'username' => 'admin',
@@ -393,6 +399,13 @@ $projects = [
         'image' => 'https://ng.jumia.is/unsafe/fit-in/680x680/filters:fill(white)/product/49/3146104/1.jpg?8685',
         'tech_stack' => ['Laravel', 'PHP', 'MySQL', 'Tailwind CSS', 'Alozie Akpa Amu'],
         'github_url' => 'https://github.com/username/keviloq-portfolio',
+        'client' => 'QWE Systems',
+        'client_url' => 'https://qwesystems.com',
+        'client_comment' => [
+            'comment' => 'The Ledger API rollout was flawless. Asonta delivered a robust, lightning-fast architecture that handles our peak transaction periods without breaking a sweat. It\'s the most stable part of our stack.',
+            'poition' => 'CEO',
+            'name' => 'Sam Ergu'
+        ],
         'project_type' => 'web',
         'view_type' => 'live',
         'live_url' => 'https://portfolio.example.com',
@@ -402,6 +415,27 @@ $projects = [
             'Throughput' => '8k rps',
             'Test coverage' => '94%',
             'Status' => 'Good'
+        ],
+         'other_details' => [
+            '0' => [
+                'header' => 'The Challenge',
+                'paragrah' => 'Atlas Fintech was struggling with database deadlocks and slow transaction posting as their user base rapidly scaled. Their legacy architecture could not guarantee atomicity under high concurrent load, risking out-of-sync balances. They needed a hyper-fast, rock-solid core ledger capable of processing thousands of financial events per minute without dropping or duplicating a single record.',
+                'order' => 1,
+                'is_active' => true,
+            ],
+            '1' => [
+                'header' => 'Architecture & Approach',
+                'paragrah' => 'I engineered a strict double-entry accounting system where every transaction enforces balanced debits and credits at the database level. To achieve the required sub-50ms latency, the API is served via Laravel Octane (powered by Swoole), keeping the framework booted in memory and drastically reducing overhead.
+                               State mutations utilize aggressive pessimistic locking (SELECT ... FOR UPDATE) within PostgreSQL to ensure absolute ACID compliance during concurrent postings. Furthermore, the API enforces strict idempotency using Redis, completely neutralizing the risk of duplicate charges caused by unreliable mobile network retries.',
+                'order' => 2,
+                'is_active' => true,
+            ],
+            '3' => [
+                'header' => 'The Results',
+                'paragrah' => 'The new Ledger API launched seamlessly, migrating over 2 million historical accounts with zero downtime. API throughput increased by 800% while server resources were slashed in half thanks to Octane\'s raw efficiency. The finance team now operates with complete confidence, backed by immutable audit trails and 94% test coverage via Pest PHP.',
+                'order' => 3,
+                'is_active' => true,
+            ]
         ],
         'order' => 1,
         'is_active' => true,

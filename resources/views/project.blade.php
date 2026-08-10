@@ -10,12 +10,15 @@
 
     <section class="works" id="works" data-per-page="6">
 
-        <div class="works-head">
+        
+
+        <div class="works-head animate-up delay-1">
             <h2>{{ $projectCard->content['title'] }}<span class="text-gradient">
                     {{ $projectCard->content['title_highligted'] }}</span></h2>
             <p>{{ $projectCard->content['subtitle'] }}</p>
         </div>
-        <div class="tabs">
+
+        <div class="tabs" animate-up delay-2>
             <button class="tab active" data-tab="All">All</button>
             @foreach ($projectCard->content['categories'] as $category => $name)
                 <button class="tab" data-tab="{{ $category }}">{{ $name }}</button>
@@ -23,7 +26,7 @@
 
         </div>
 
-        <div class="grid-bento">
+        <div class="grid-bento" animate-up delay-4>
             
             @foreach ($projects as $project)
                 @if ($project->is_active)

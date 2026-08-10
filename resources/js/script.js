@@ -1,22 +1,4 @@
-// Theme Setup
-const themeToggleBtn = document.querySelector('[data-theme-toggle]');
-const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-if (currentTheme === 'dark') {
-  document.documentElement.setAttribute('data-theme', 'dark');
-}
 
-if (themeToggleBtn) {
-  themeToggleBtn.addEventListener('click', () => {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const newTheme = isDark ? 'light' : 'dark';
-    if (newTheme === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-    }
-    localStorage.setItem('theme', newTheme);
-  });
-}
 
 // Mobile nav toggle
 document.addEventListener("click", (e) => {
@@ -62,7 +44,7 @@ function showToast(message, type = "success") {
 // Contact form validation + submit
 const form = document.getElementById("contact-form");
 if (form) {
-  const FORM_ENDPOINT = "https://example.com/your-form-endpoint";
+  const FORM_ENDPOINT = "/api/contact/send";
 
   const validators = {
     name: (v) => {
@@ -116,36 +98,64 @@ if (form) {
   });
 
   form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(form));
-    let valid = true;
-    Object.entries(validators).forEach(([name, fn]) => {
-      const msg = fn(data[name] ?? "");
-      setError(name, msg);
-      if (msg) valid = false;
-    });
-    if (!valid) return;
+  e.preventDefault();
 
-    const btn = form.querySelector("[type='submit']");
-    btn.disabled = true;
-    const original = btn.textContent;
-    btn.textContent = "Sending…";
-    try {
-      const res = await fetch(FORM_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error("network");
-      showToast("Message sent — I'll get back to you within 48h.");
-      form.reset();
-    } catch {
-      showToast("Couldn't send the message. Try email instead.", "error");
-    } finally {
-      btn.disabled = false;
-      btn.textContent = original;
-    }
+  const data = Object.fromEntries(new FormData(form));
+
+  let valid = true;
+
+  Object.entries(validators).forEach(([name, fn]) => {
+    const msg = fn(data[name] ?? "");
+
+    setError(name, msg);
+
+    if (msg) valid = false;
   });
+
+  if (!valid) return;
+
+  const btn = form.querySelector("[type='submit']");
+  const original = btn.textContent;
+
+  btn.disabled = true;
+  btn.textContent = "Sending…";
+
+  try {
+    const res = await fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+
+    console.log("Response:", res);
+    console.log("Data:", result);
+
+    if (!res.ok) {
+      throw new Error(result.message || "Something went wrong");
+    }
+
+    showToast(result.message);
+
+    form.reset();
+
+  } catch (error) {
+    console.error(error);
+
+    showToast(
+      error.message || "Couldn't send the message. Try email instead.",
+      "error"
+    );
+
+  } finally {
+    btn.disabled = false;
+    btn.textContent = original;
+  }
+});
 }
 
 // Works grid: filter + pagination

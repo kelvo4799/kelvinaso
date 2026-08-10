@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\Page;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -24,9 +25,19 @@ class ProjectController extends Controller
 
         $page = Page::where('slug', 'projects')->first();
 
-        dd($project);
+        $next = Project::find($project->id +1);
 
-        return view('project_detail', compact('project', 'page'));
+        if (!$next){
+            $next = Project::find(1);
+        }
+
+        $nextProject = [
+            'slug' => $next->slug,
+            'title' => $next->title,
+            'short_description' => Str::limit($next->description, 100)
+        ];
+
+        return view('project_detail', compact('project', 'page', 'nextProject'));
 
     }
     

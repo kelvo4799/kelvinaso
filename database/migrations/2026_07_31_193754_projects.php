@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('industry')->nullable()->default('Technology');
             $table->string('client')->nullable()->default('Self');
             $table->string('client_url')->nullable();
+            $table->json('client_comment')->nullable();
             $table->string('github_url')->nullable();
             $table->enum('project_type', ['web', 'mobile', 'desktop', 'other'])->default('web');
             $table->enum('view_type', ['live', 'preview'])->default('live');

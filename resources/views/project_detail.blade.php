@@ -76,10 +76,10 @@
 
 
 
-                @if (false)
-                    <a href="{{ $project->url }}" target="_blank" class="btn btn-primary"
+                @if ( $project->view_type === 'live')
+                    <a href="{{ $project->live_url }}" target="_blank" class="btn btn-primary"
                         style="margin-top: 2rem; width: 100%;">
-                        View Source
+                        View Live
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2.5" stroke-linecap="round">
                             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
@@ -87,8 +87,8 @@
                             <line x1="10" y1="14" x2="21" y2="3" />
                         </svg>
                     </a>
-                @elseif (true)
-                    <button data-preview="http://localhost/serve.jpeg" class="btn"
+                @elseif ($project->view_type === 'preview')
+                    <button data-preview="{{ $project->live_url }}" class="btn"
                         style="margin-top: 0.75rem; width: 100%;">
                         Live Preview
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -121,129 +121,67 @@
             </div>
 
             @if (!empty($project->metrics))
-              
-            <div class="card metrics animate-up delay-4 hero-card"
-                style="margin-top: 1.5rem; border-radius: var(--radius-xl);">
-                @foreach ($project->metrics as $metric => $value)
 
-                <div>
-                    <p class="value">{{ $value }}</p>
-                    <p class="label">{{ $metric }}</p>
+                <div class="card metrics animate-up delay-4 hero-card"
+                    style="margin-top: 1.5rem; border-radius: var(--radius-xl);">
+                    @foreach ($project->metrics as $metric => $value)
+                        <div>
+                            <p class="value">{{ $value }}</p>
+                            <p class="label">{{ $metric }}</p>
+                        </div>
+                    @endforeach
+
                 </div>
-                @endforeach
 
-            </div>
-              
             @endif
-            
 
+            @if (is_array($project->other_details) && !empty($project->other_details))
             <div class="card animate-up delay-4 hero-card" style="margin-top: 1.5rem; border-radius: var(--radius-xl);">
                 <div style="display: flex; flex-direction: column; gap: 3rem;">
-                    <div>
-                        <h2 style="font-size: 1.75rem;">The Challenge</h2>
-                        <p style="color:var(--muted); font-size:1.1rem; line-height:1.7; margin-top:1rem;">
-                            {{ $project->other_details }}
-                        </p>
-                    </div>
-                    <div>
-                        <h2 style="font-size: 1.75rem;">Architecture & Approach</h2>
-                        <p style="color:var(--muted); font-size:1.1rem; line-height:1.7; margin-top:1rem;">
-                            I engineered a strict double-entry accounting system where every transaction enforces
-                            balanced debits
-                            and credits at the database level. To achieve the required sub-50ms latency, the API is
-                            served via
-                            <strong>Laravel Octane</strong> (powered by Swoole), keeping the framework booted in memory
-                            and
-                            drastically reducing overhead.
-                        </p>
-                        <p style="color:var(--muted); font-size:1.1rem; line-height:1.7; margin-top:1rem;">
-                            State mutations utilize aggressive pessimistic locking (<code>SELECT ... FOR UPDATE</code>)
-                            within
-                            PostgreSQL to ensure absolute ACID compliance during concurrent postings. Furthermore, the
-                            API enforces
-                            strict idempotency using Redis, completely neutralizing the risk of duplicate charges caused
-                            by
-                            unreliable mobile network retries.
-                        </p>
+                  @foreach ( $project->other_details as $content)
+                    @if ($content['is_active'])
+                      <div>
+                          <h2 style="font-size: 1.75rem;">{{ $content['header'] }}</h2>
+                          <p style="color:var(--muted); font-size:1.1rem; line-height:1.7; margin-top:1rem;">
+                              {{ $content['paragrah'] }}
+                          </p>
+                      </div>
+                    @endif
+                  @endforeach
 
-                        <div class="card"
-                            style="margin: 2rem 0 0; padding: 0; overflow: hidden; background: #0f1016; border-color: rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
-                            <div
-                                style="display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.02);">
-                                <div
-                                    style="width: 12px; height: 12px; border-radius: 50%; background: #ef4444; flex-shrink: 0;">
-                                </div>
-                                <div
-                                    style="width: 12px; height: 12px; border-radius: 50%; background: #eab308; flex-shrink: 0;">
-                                </div>
-                                <div
-                                    style="width: 12px; height: 12px; border-radius: 50%; background: #22c55e; flex-shrink: 0;">
-                                </div>
-                                <div
-                                    style="margin-left: auto; color: #8b8d9a; font-size: 0.75rem; font-family: monospace; letter-spacing: 0.05em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;">
-                                    POST /api/v1/ledger/entries</div>
-                            </div>
-                            <div style="padding: 1.5rem; overflow-x: auto;">
-                                <pre
-                                    style="margin: 0; font-family: monospace; font-size: 0.85rem; line-height: 1.6; color: #e2e8f0; white-space: pre-wrap; word-break: break-all;">
-<span style="color: #c678dd;">{</span>
-  <span style="color: #e06c75;">"account_id"</span>: <span style="color: #98c379;">"acc_01H9X"</span>,
-  <span style="color: #e06c75;">"amount"</span>: <span style="color: #d19a66;">25000</span>,
-  <span style="color: #e06c75;">"currency"</span>: <span style="color: #98c379;">"USD"</span>,
-  <span style="color: #e06c75;">"entry_type"</span>: <span style="color: #98c379;">"credit"</span>,
-  <span style="color: #e06c75;">"idempotency_key"</span>: <span style="color: #98c379;">"req_992kxP"</span>,
-  <span style="color: #e06c75;">"metadata"</span>: <span style="color: #c678dd;">{</span>
-    <span style="color: #e06c75;">"stripe_charge"</span>: <span style="color: #98c379;">"ch_1N9b..."</span>
-  <span style="color: #c678dd;">}</span>
-<span style="color: #c678dd;">}</span></pre>
-                            </div>
-                        </div>
-                    </div>
                     <div>
-                        <h2 style="font-size: 1.75rem;">The Results</h2>
-                        <p style="color:var(--muted); font-size:1.1rem; line-height:1.7; margin-top:1rem;">
-                            The new Ledger API launched seamlessly, migrating over 2 million historical accounts with
-                            zero downtime.
-                            API throughput increased by 800% while server resources were slashed in half thanks to
-                            Octane's raw
-                            efficiency. The finance team now operates with complete confidence, backed by immutable
-                            audit trails and
-                            94% test coverage via Pest PHP.
-                        </p>
 
+                        @if ($project->client_comment)
                         <div class="card"
                             style="margin-top: 2.5rem; padding: 2rem; border-left: 4px solid var(--accent); background: rgba(240, 86, 58, 0.03);">
-                            <p style="font-size: 1.1rem; font-style: italic; line-height: 1.6; color: var(--fg);">"The
-                                Ledger API
-                                rollout was flawless. Asonta delivered a robust, lightning-fast architecture that
-                                handles our peak
-                                transaction periods without breaking a sweat. It's the most stable part of our stack."
+                            <p style="font-size: 1.1rem; font-style: italic; line-height: 1.6; color: var(--fg);">"{{ $project->client_comment['comment'] }}"
                             </p>
                             <div style="display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem;">
                                 <div
                                     style="width: 40px; height: 40px; border-radius: 50%; background: var(--border-strong); display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--muted); font-size: 0.8rem;">
                                     DC</div>
                                 <div>
-                                    <p style="font-weight: 600; font-size: 0.9rem; margin: 0;">David Chen</p>
-                                    <p style="color: var(--muted); font-size: 0.8rem; margin: 0;">CTO, Atlas Fintech
+                                    <p style="font-weight: 600; font-size: 0.9rem; margin: 0;">{{ $project->client_comment['name'] }}</p>
+                                    <p style="color: var(--muted); font-size: 0.8rem; margin: 0;">{{ $project->client_comment['poition'] }}, {{ $project->client }}
                                     </p>
                                 </div>
                             </div>
-                        </div>
+                          </div>
+                        @endif
                     </div>
                 </div>
             </div>
+            @endif
 
-            
+
 
             <div class="animate-up delay-4" style="margin-top:4rem;">
                 <div class="card hero-card"
                     style="display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom: 0; border-radius: var(--radius-xl);">
                     <p class="eyebrow" style="color:var(--muted); margin-bottom: 0.75rem;">Up Next</p>
-                    <h2 style="font-size: 2rem; margin-bottom: 0.75rem;">Churn Signals</h2>
-                    <p style="color:var(--muted); font-size:1.05rem; margin-bottom: 1.5rem; max-width: 400px;">A
-                        churn-prediction study across 18 months of usage data driving retention strategies.</p>
-                    <a href="churn-signals.html" class="btn btn-primary">
+                    <h2 style="font-size: 2rem; margin-bottom: 0.75rem;">{{ $nextProject['title'] }}</h2>
+                    <p style="color:var(--muted); font-size:1.05rem; margin-bottom: 1.5rem; max-width: 400px;">{{ $nextProject['short_description'] }}</p>
+                    <a href="{{ Route('projects.show', $nextProject['slug']) }}" class="btn btn-primary">
                         Read Case Study
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"

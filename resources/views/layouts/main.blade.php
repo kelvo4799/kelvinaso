@@ -12,7 +12,7 @@
         href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&display=swap" />
 
     <!-- Scripts -->
-    @vite(['resources/css/style.css', 'resources/js/script.js'])
+    @vite(['resources/css/style.css', 'resources/css/notify.css', 'resources/js/script.js', 'resources/js/theme.js'])
 
 
 </head>

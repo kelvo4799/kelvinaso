@@ -17,6 +17,7 @@ class Project extends Model
         'industry',
         'client',
         'client_url',
+        'client_comment',
         'tech_stack',
         'github_url',
         'project_type',
@@ -36,6 +37,7 @@ class Project extends Model
             'tech_stack' => 'json',
             'metrics' => 'json',
             'other_details' => 'json',
+            'client_comment' => 'json',
             'meta' => 'json'
         ];
     }
