@@ -11,11 +11,11 @@ class AboutController extends Controller
     {
         $users = $this->users;
 
-        $stacks = $this->users->stacks()->where('is_active', true)->get()->groupBy('type')->toArray();
+        $stacks = $this->users ? $this->users->stacks()->where('is_active', true)->get()->groupBy('type')->toArray() : [];
 
-        $page = Page::where('slug', 'home')->first();
+        $page = Page::where('slug', 'about')->first() ?? Page::where('slug', 'home')->first();
 
-        $profile = $this->users->profile()->first();
+        $profile = $this->users ? $this->users->profile()->first() : null;
 
         return view('about', compact('users', 'page', 'profile', 'stacks'));
     }

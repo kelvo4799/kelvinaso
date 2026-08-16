@@ -14,12 +14,14 @@ return new class extends Migration
         Schema::create('experiences', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description');
             $table->string('company');
-            $table->string('location');
+            $table->string('location')->nullable();
+            $table->string('employment_type')->nullable()->default('Full-time');
             $table->string('start_year');
-            $table->date('end_year');
-            $table->boolean('is_active');
+            $table->string('end_year')->nullable();
+            $table->boolean('is_current')->default(false);
+            $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

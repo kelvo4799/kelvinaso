@@ -9,6 +9,11 @@ class EmailTemplate extends Model
     protected $fillable = [
         'slug',
         'subject',
-        'body_html'
+        'body_html',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
     ];
 }

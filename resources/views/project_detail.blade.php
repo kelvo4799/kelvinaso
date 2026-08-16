@@ -66,10 +66,17 @@
                     <p class="stack-title" style="margin-bottom: 1rem;">Technologies</p>
                     <div class="chips" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
 
-                        @foreach ($project->tech_stack as $tech)
-                            <span class="chip"
-                                style="flex: 1 1 auto; max-width: max-content; padding: 0.5rem 1rem;">{{ $tech }}</span>
-                        @endforeach
+                        @if(is_array($project->tech_stack))
+                            @foreach ($project->tech_stack as $tech)
+                                <span class="chip"
+                                    style="flex: 1 1 auto; max-width: max-content; padding: 0.5rem 1rem;">{{ $tech }}</span>
+                            @endforeach
+                        @elseif(!empty($project->tech_stack))
+                            @foreach (array_filter(array_map('trim', explode(',', $project->tech_stack))) as $tech)
+                                <span class="chip"
+                                    style="flex: 1 1 auto; max-width: max-content; padding: 0.5rem 1rem;">{{ $tech }}</span>
+                            @endforeach
+                        @endif
 
                     </div>
                 </div>
@@ -114,21 +121,30 @@
             <div class="card stack animate-up delay-3" style="margin-top: 1.5rem; padding: 1rem;">
 
                 <div class="profile-img-wrap">
-                    <div class="profile-img"><img src="{{ $project->image }}" alt="Abstract data visualization" />
+                    <div class="profile-img"><img src="{{ str_starts_with($project->image, 'http') ? $project->image : asset($project->image) }}" alt="{{ $project->title }}" />
                     </div>
 
                 </div>
             </div>
 
-            @if (!empty($project->metrics))
+            @if (is_array($project->metrics) && !empty($project->metrics))
 
                 <div class="card metrics animate-up delay-4 hero-card"
                     style="margin-top: 1.5rem; border-radius: var(--radius-xl);">
-                    @foreach ($project->metrics as $metric => $value)
-                        <div>
-                            <p class="value">{{ $value }}</p>
-                            <p class="label">{{ $metric }}</p>
-                        </div>
+                    @foreach ($project->metrics as $key => $val)
+                        @if(is_array($val))
+                            @foreach ($val as $mKey => $mVal)
+                            <div>
+                                <p class="value">{{ is_scalar($mVal) ? $mVal : '' }}</p>
+                                <p class="label">{{ is_scalar($mKey) ? $mKey : '' }}</p>
+                            </div>
+                            @endforeach
+                        @elseif(is_scalar($val))
+                            <div>
+                                <p class="value">{{ $val }}</p>
+                                <p class="label">{{ is_string($key) ? $key : '' }}</p>
+                            </div>
+                        @endif
                     @endforeach
 
                 </div>
@@ -139,42 +155,51 @@
             <div class="card animate-up delay-4 hero-card" style="margin-top: 1.5rem; border-radius: var(--radius-xl);">
                 <div style="display: flex; flex-direction: column; gap: 3rem;">
                   @foreach ( $project->other_details as $content)
-                    @if ($content['is_active'])
+                    @php
+                      $isActive = $content['is_active'] ?? ($content['is_visible'] ?? true);
+                      $header = $content['header'] ?? ($content['title'] ?? ($content['content']['title'] ?? ''));
+                      $body = $content['paragrah'] ?? ($content['paragraph'] ?? ($content['body'] ?? ($content['content']['body'] ?? '')));
+                    @endphp
+                    @if ($isActive && ($header || $body))
                       <div>
-                          <h2 style="font-size: 1.75rem;">{{ $content['header'] }}</h2>
-                          <p style="color:var(--muted); font-size:1.1rem; line-height:1.7; margin-top:1rem;">
-                              {{ $content['paragrah'] }}
-                          </p>
+                          @if($header)<h2 style="font-size: 1.75rem;">{{ $header }}</h2>@endif
+                          @if($body)<p style="color:var(--muted); font-size:1.1rem; line-height:1.7; margin-top:1rem;">
+                              {{ $body }}
+                          </p>@endif
                       </div>
                     @endif
                   @endforeach
-
-                    <div>
-
-                        @if ($project->client_comment)
-                        <div class="card"
-                            style="margin-top: 2.5rem; padding: 2rem; border-left: 4px solid var(--accent); background: rgba(240, 86, 58, 0.03);">
-                            <p style="font-size: 1.1rem; font-style: italic; line-height: 1.6; color: var(--fg);">"{{ $project->client_comment['comment'] }}"
-                            </p>
-                            <div style="display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem;">
-                                <div
-                                    style="width: 40px; height: 40px; border-radius: 50%; background: var(--border-strong); display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--muted); font-size: 0.8rem;">
-                                    DC</div>
-                                <div>
-                                    <p style="font-weight: 600; font-size: 0.9rem; margin: 0;">{{ $project->client_comment['name'] }}</p>
-                                    <p style="color: var(--muted); font-size: 0.8rem; margin: 0;">{{ $project->client_comment['poition'] }}, {{ $project->client }}
-                                    </p>
-                                </div>
-                            </div>
-                          </div>
-                        @endif
-                    </div>
                 </div>
             </div>
             @endif
 
+            @if (!empty($project->client_comment) && is_array($project->client_comment) && !empty($project->client_comment['comment']))
+            @php
+                $commentName = $project->client_comment['name'] ?? '';
+                $commentWords = array_values(array_filter(explode(' ', trim($commentName))));
+                $commentInitials = count($commentWords) >= 2 
+                    ? strtoupper(substr($commentWords[0], 0, 1) . substr(end($commentWords), 0, 1))
+                    : (count($commentWords) === 1 ? strtoupper(substr($commentWords[0], 0, 2)) : 'CC');
+                $commentPosition = $project->client_comment['position'] ?? ($project->client_comment['poition'] ?? '');
+            @endphp
+            <div class="card animate-up delay-4"
+                style="margin-top: 1.5rem; padding: 2rem; border-left: 4px solid var(--accent); background: rgba(240, 86, 58, 0.03); border-radius: var(--radius-xl);">
+                <p style="font-size: 1.1rem; font-style: italic; line-height: 1.6; color: var(--fg);">"{{ $project->client_comment['comment'] }}"
+                </p>
+                <div style="display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem;">
+                    <div
+                        style="width: 40px; height: 40px; border-radius: 50%; background: var(--border-strong); display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--muted); font-size: 0.8rem;">
+                        {{ $commentInitials }}</div>
+                    <div>
+                        <p style="font-weight: 600; font-size: 0.9rem; margin: 0;">{{ $commentName }}</p>
+                        <p style="color: var(--muted); font-size: 0.8rem; margin: 0;">{{ $commentPosition }}{{ $commentPosition && !empty($project->client) ? ', ' : '' }}{{ $project->client ?? '' }}
+                        </p>
+                    </div>
+                </div>
+              </div>
+            @endif
 
-
+            @if(!empty($nextProject['slug']))
             <div class="animate-up delay-4" style="margin-top:4rem;">
                 <div class="card hero-card"
                     style="display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom: 0; border-radius: var(--radius-xl);">
@@ -192,6 +217,7 @@
                     </a>
                 </div>
             </div>
+            @endif
 
 
         </div>

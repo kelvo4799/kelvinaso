@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\HasImageUpload;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
+    use HasImageUpload;
 
     protected $fillable = [
         'title',
         'slug',
         'description',
         'image',
+        'icon',
         'role',
         'year',
         'industry',
@@ -28,7 +31,7 @@ class Project extends Model
         'is_active',
         'metrics',
         'other_details',
-        'meta'
+        'meta',
     ];
 
     protected function casts(): array
@@ -38,7 +41,7 @@ class Project extends Model
             'metrics' => 'json',
             'other_details' => 'json',
             'client_comment' => 'json',
-            'meta' => 'json'
+            'meta' => 'json',
         ];
     }
 
@@ -46,5 +49,4 @@ class Project extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 }

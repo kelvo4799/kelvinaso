@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use App\Http\Middleware\UserMiddleware;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\TrackPageViewsMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'user' => UserMiddleware::class,
             'admin' => AdminMiddleware::class,
+            'track.page.views' => TrackPageViewsMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

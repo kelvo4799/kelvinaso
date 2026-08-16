@@ -2,6 +2,26 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+    <script>
+        (function () {
+            try {
+                const root = document.documentElement;
+                const savedTheme = localStorage.getItem('theme');
+                const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const theme = savedTheme || (systemDark ? 'dark' : 'light');
+
+                if (theme === 'dark') {
+                    root.setAttribute('data-theme', 'dark');
+                } else {
+                    root.removeAttribute('data-theme');
+                }
+
+                root.style.colorScheme = theme;
+            } catch (e) {
+                // Ignore storage access issues and keep the default theme.
+            }
+        })();
+    </script>
 
     <x-seo-component :page="$page" :settings="$settings ?? ['site_name' => 'Portfolio']" />
 

@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         datasets: [{
           label: 'Page Views',
-          data: [6500, 7800, 6900, 8100, 9500, 10200, 11500, 10800, 11200, 12500, 12300, 14000],
+          data: pageViewData || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           borderColor: '#6366f1',
           backgroundColor: gradient,
           borderWidth: 3,
@@ -233,7 +233,13 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             ticks: {
               callback: function(value) {
-                return value / 1000 + 'k';
+                if (value >= 1000) {
+                  return value / 1000 + 'k';
+                }
+                if (value >= 1000000) {
+                  return value / 1000000 + 'M';
+                }
+                return value;
               }
             }
           },

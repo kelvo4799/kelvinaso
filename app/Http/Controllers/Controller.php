@@ -10,7 +10,11 @@ abstract class Controller
 
     public function __construct()
     {
-        $this->users = User::where('id', 1)->first();
+        try {
+            $this->users = User::where('id', 1)->first() ?? User::first();
+        } catch (\Throwable $e) {
+            $this->users = null;
+        }
     }
     
 }

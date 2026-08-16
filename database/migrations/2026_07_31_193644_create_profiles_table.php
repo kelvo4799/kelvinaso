@@ -16,10 +16,10 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
-            $table->string('bio_title')->nullable();
+            $table->text('bio_title')->nullable();
             $table->string('bio_header')->nullable();
-            $table->string('bio')->nullable();
-            $table->string('bio_extra')->nullable();
+            $table->text('bio')->nullable();
+            $table->text('bio_extra')->nullable();
             $table->string('avatar')->nullable();
             $table->string('cover_image')->nullable();
             $table->string('location')->nullable();

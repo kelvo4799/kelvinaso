@@ -11,34 +11,30 @@ class ProjectController extends Controller
 {
     public function index(Request $request)
     {
-        $projects = Project::all();
+        $projects = Project::where('is_active', true)->orderBy('created_at', 'desc')->get();
 
         $page = Page::where('slug', 'projects')->first();
 
         return view('project', compact('projects', 'page'));
-
     }
 
-    public function show(Request $request, string $slug){
-
-        $project = Project::where('slug', $slug)->first();
+    public function show(Request $request, string $slug)
+    {
+        $project = Project::where('slug', $slug)->firstOrFail();
 
         $page = Page::where('slug', 'projects')->first();
 
-        $next = Project::find($project->id +1);
-
-        if (!$next){
-            $next = Project::find(1);
-        }
+        $next = Project::where('id', '>', $project->id)->where('is_active', true)->first()
+            ?? Project::where('id', '!=', $project->id)->where('is_active', true)->first()
+            ?? Project::where('id', '!=', $project->id)->first();
 
         $nextProject = [
-            'slug' => $next->slug,
-            'title' => $next->title,
-            'short_description' => Str::limit($next->description, 100)
+            'slug' => $next->slug ?? $project->slug,
+            'title' => $next->title ?? $project->title,
+            'short_description' => Str::limit($next->description ?? $project->description ?? '', 100)
         ];
 
         return view('project_detail', compact('project', 'page', 'nextProject'));
-
     }
     
 }

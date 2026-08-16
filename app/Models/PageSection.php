@@ -17,7 +17,7 @@ class PageSection extends Model
     protected function casts(): array
     {
         return [
-            'content' => 'json',
+            'content' => 'array',
         ];
     }
 

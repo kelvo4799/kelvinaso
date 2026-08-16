@@ -27,14 +27,12 @@ class ContactController extends Controller
 
     public function index()
     {
-        $page = Page::where('slug', 'home')->first();
+        $page = Page::where('slug', 'contact')->first() ?? Page::where('slug', 'home')->first();
 
-        $profile = $this->users->profile()->first();
+        $profile = $this->users ? $this->users->profile()->first() : null;
 
-        //dd($profile);
-
-        $email = $profile->direct_email;
-        $phone = $profile->direct_phone;
+        $email = $profile?->direct_email ?? '';
+        $phone = $profile?->direct_phone ?? '';
 
         return view('contact', compact('page', 'email', 'phone'));
     }

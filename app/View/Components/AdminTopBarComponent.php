@@ -12,12 +12,14 @@ class AdminTopBarComponent extends Component
      * Create a new component instance.
      */
     public function __construct(
-        public string $fname = '',
-        public string $lname = '',
-        public string $email = '',
+        public ?string $fname = '',
+        public ?string $lname = '',
+        public ?string $email = '',
     )
     {
-        //
+        $this->fname = $fname ?? '';
+        $this->lname = $lname ?? '';
+        $this->email = $email ?? '';
     }
 
     /**

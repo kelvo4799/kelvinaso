@@ -2,7 +2,7 @@
     <div class="nav-inner">
         <a href="/" class="brand">
             <span class="brand-dot"></span>
-            <span class="brand-name">Asonta Kelvin</span>
+            <span class="brand-name">{{ setting('site_name') }}</span>
         </a>
         <nav class="nav-links">
             <x-nav-links-component />

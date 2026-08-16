@@ -10,7 +10,7 @@
 
     <section class="works" id="works" data-per-page="6">
 
-        
+
 
         <div class="works-head animate-up delay-1">
             <h2>{{ $projectCard->content['title'] }}<span class="text-gradient">
@@ -27,12 +27,14 @@
         </div>
 
         <div class="grid-bento" animate-up delay-4>
-            
+
             @foreach ($projects as $project)
                 @if ($project->is_active)
                     <a href="/projects/{{ $project->slug }}" class="card work-card" data-work
                         data-category="{{ $project->project_type }}">
-                        <div class="work-cover"><img src="{{ $project->image }}" alt="{{ $project->title }}" loading="lazy" />
+                        <div class="work-cover"><img
+                                src="{{ str_starts_with($project->image, 'http') ? $project->image : asset($project->image) }}"
+                                alt="{{ $project->title }}" loading="lazy" />
                         </div>
                         <div class="work-body">
                             <p class="work-tag"></p>

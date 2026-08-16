@@ -19,13 +19,6 @@ class AuthPageSeeder extends Seeder
             'content' => [
                 'meta_description' => 'Login to your account',
                 'meta_keywords' => 'login, account, Keviloq Systems',
-                'image' => 'https://www.keviloq.com/assets/images/keviloq-logo.png',
-                'url' => 'https://www.keviloq.com',
-                'type' => 'website',
-                'author' => 'Keviloq Systems',
-                'robots' => 'index, follow',
-                'site_name' => 'Keviloq Systems',
-                'locale' => 'en_US',
             ]
         ]);
 
@@ -48,13 +41,6 @@ class AuthPageSeeder extends Seeder
             'content' => [
                 'meta_description' => 'Create a new account',
                 'meta_keywords' => 'register, account, Keviloq Systems',
-                'image' => 'https://www.keviloq.com/assets/images/keviloq-logo.png',
-                'url' => 'https://www.keviloq.com',
-                'type' => 'website',
-                'author' => 'Keviloq Systems',
-                'robots' => 'index, follow',
-                'site_name' => 'Keviloq Systems',
-                'locale' => 'en_US',
             ]
         ]);
 
@@ -77,13 +63,6 @@ class AuthPageSeeder extends Seeder
             'content' => [
                 'meta_description' => 'Reset your password',
                 'meta_keywords' => 'reset, password, Keviloq Systems',
-                'image' => 'https://www.keviloq.com/assets/images/keviloq-logo.png',
-                'url' => 'https://www.keviloq.com',
-                'type' => 'website',
-                'author' => 'Keviloq Systems',
-                'robots' => 'index, follow',
-                'site_name' => 'Keviloq Systems',
-                'locale' => 'en_US',
             ]
         ]);
 

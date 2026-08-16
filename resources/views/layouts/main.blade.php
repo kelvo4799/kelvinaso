@@ -2,6 +2,26 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+    <script>
+        (function() {
+            try {
+                const root = document.documentElement;
+                const savedTheme = localStorage.getItem('theme');
+                const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const theme = savedTheme || (systemDark ? 'dark' : 'light');
+
+                if (theme === 'dark') {
+                    root.setAttribute('data-theme', 'dark');
+                } else {
+                    root.removeAttribute('data-theme');
+                }
+
+                root.style.colorScheme = theme;
+            } catch (e) {
+                // Ignore storage access issues and keep the default theme.
+            }
+        })();
+    </script>
 
     <x-seo-component :page="$page" :settings="$settings ?? ['site_name' => 'Portfolio']" />
 
@@ -12,9 +32,36 @@
         href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Instrument+Serif:ital@0;1&display=swap" />
 
     <!-- Scripts -->
-    @vite(['resources/css/style.css', 'resources/css/notify.css', 'resources/js/script.js', 'resources/js/theme.js'])
+    @vite(['resources/js/theme.js', 'resources/css/style.css', 'resources/css/notify.css', 'resources/js/script.js'])
 
+    @php
+        $primaryColor   = setting('primary_color', '#f0563a');
+        $accentColor    = setting('accent_color', '#db391c');
+        $secondaryColor = setting('secondary_color', '#6366f1');
 
+        $primaryRgb   = hex_to_rgb($primaryColor, '240, 86, 58');
+        $accentRgb    = hex_to_rgb($accentColor, '219, 57, 28');
+        $secondaryRgb = hex_to_rgb($secondaryColor, '99, 102, 241');
+    @endphp
+    @if ($primaryColor)
+        <style>
+            :root,
+            [data-theme="dark"] {
+                --accent: {{ $primaryColor }} !important;
+                --accent-rgb: {{ $primaryRgb }} !important;
+
+                --accent-2: {{ $accentColor }} !important;
+                --accent-2-rgb: {{ $accentRgb }} !important;
+
+                --secondary: {{ $secondaryColor }} !important;
+                --secondary-rgb: {{ $secondaryRgb }} !important;
+
+                --border-glow: rgba({{ $primaryRgb }}, 0.2) !important;
+                --gradient: linear-gradient(135deg, {{ $primaryColor }} 0%, {{ $accentColor }} 100%) !important;
+                --glow: 0 0 60px -15px rgba({{ $primaryRgb }}, 0.45) !important;
+            }
+        </style>
+    @endif
 </head>
 
 <body>
@@ -23,29 +70,9 @@
         {{ $slot }}
     </main>
 
-    <footer class="footer">
-        <div class="container">
+    <x-footer-component />
 
-            <div class="footer-cta-card">
-        <h2>Are You Ready to kickstart your project with a touch of magic?</h2>
-        <p>Reach out and let's make it happen ✨. I'm also available for full-time or freelance opportunities to push the
-          boundaries of data and deliver exceptional work.</p>
-        <a href="contact.html" class="btn-cta">
-          Let's Talk
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <line x1="12" y1="5" x2="12" y2="19"></line>
-            <polyline points="19 12 12 19 5 12"></polyline>
-          </svg>
-        </a>
-      </div>
-
-
-            <div class="footer-bottom-text">
-                <p>Copyright @2026, <span class="brand-highlight">Asonta Kelvin</span> All Rights Reserved.</p>
-                <p>Crafted with ❤️ in Lisbon</p>
-            </div>
-        </div>
-    </footer>
+    <x-ai-chatbot />
 </body>
 
 

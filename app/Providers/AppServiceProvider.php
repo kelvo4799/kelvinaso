@@ -19,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if (!app()->runningInConsole()) {
+            config([
+                'app.name' => setting('site_name', config('app.name')),
+            ]);
+        }
     }
 }

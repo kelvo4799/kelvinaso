@@ -2,7 +2,26 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
+    <script>
+        (function () {
+            try {
+                const root = document.documentElement;
+                const savedTheme = localStorage.getItem('theme');
+                const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const theme = savedTheme || (systemDark ? 'dark' : 'light');
 
+                if (theme === 'dark') {
+                    root.setAttribute('data-theme', 'dark');
+                } else {
+                    root.removeAttribute('data-theme');
+                }
+
+                root.style.colorScheme = theme;
+            } catch (e) {
+                // Ignore storage access issues and keep the default theme.
+            }
+        })();
+    </script>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,9 +32,24 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
     <!-- Scripts -->
-    @vite(['resources/css/admin.css', 'resources/css/notify.css', 'resources/js/theme.js', 'resources/js/admin.js'])
+    @vite(['resources/css/admin.css', 'resources/css/notify.css', 'resources/js/theme.js', 'resources/js/admin.js', 'resources/js/notify.js'])
 
-
+    @php
+        $primaryColor = \App\Models\Settings::where('key', 'primary_color')->value('value') ?? '#f0563a';
+        $accentColor = \App\Models\Settings::where('key', 'accent_color')->value('value') ?? '#db391c';
+    @endphp
+    @if ($primaryColor)
+        <style>
+            :root, [data-theme="dark"] {
+                --accent: {{ $primaryColor }} !important;
+                --accent-2: {{ $accentColor }} !important;
+                --c-accent: {{ $primaryColor }} !important;
+                --border-glow: {{ $primaryColor }}33 !important;
+                --gradient: linear-gradient(135deg, {{ $primaryColor }} 0%, {{ $accentColor }} 100%) !important;
+                --glow: 0 0 60px -15px {{ $primaryColor }}40 !important;
+            }
+        </style>
+    @endif
 </head>
 
 <body>
@@ -41,47 +75,55 @@
        
 </body>
 
+<x-notify-component />
+
 </html>
 
 <!-- Project Modal -->
 <div class="modal-backdrop" id="projectModal">
   <div class="modal" role="dialog" aria-modal="true">
     <div class="modal-header">
-      <h2>Project Details</h2>
+      <h2>Create New Project</h2>
       <button class="modal-close" aria-label="Close" data-modal-close>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
     </div>
-    <form id="projectForm" data-mock-save="Project saved successfully!">
+    <form id="projectForm" action="{{ route('projects.store.admin') }}" method="POST">
+      @csrf
       <div class="modal-body">
         <div class="form-grid">
           <div class="field">
-            <label for="p_name">Project Name</label>
-            <input type="text" id="p_name" class="input" placeholder="e.g. Portfolio v4" required>
+            <label for="p_name">Project Title</label>
+            <input type="text" id="p_name" name="title" class="input" placeholder="e.g. Revenue Analytics Dashboard" required>
           </div>
           <div class="form-grid cols-2">
             <div class="field">
-              <label for="p_tech">Tech Stack</label>
-              <input type="text" id="p_tech" class="input" placeholder="React, Node.js...">
+              <label for="p_category">Category</label>
+              <select id="p_category" name="category" class="input">
+                <option value="web">Web Development</option>
+                <option value="mobile">Mobile App</option>
+                <option value="desktop">Desktop App</option>
+                <option value="other">Other</option>
+              </select>
             </div>
             <div class="field">
-              <label for="p_status">Status</label>
-              <select id="p_status" class="input">
-                <option>Active</option>
-                <option>Completed</option>
-                <option>Archived</option>
-              </select>
+              <label for="p_year">Year</label>
+              <input type="number" id="p_year" name="year" class="input" value="{{ date('Y') }}" required>
             </div>
           </div>
           <div class="field">
-            <label for="p_desc">Description</label>
-            <textarea id="p_desc" class="textarea" placeholder="Describe the project..."></textarea>
+            <label for="p_tech">Tech Stack (comma separated)</label>
+            <input type="text" id="p_tech" name="tech" class="input" placeholder="Laravel, Vue, Tailwind CSS">
+          </div>
+          <div class="field">
+            <label for="p_desc">Short Description</label>
+            <textarea id="p_desc" name="description" class="textarea" placeholder="Brief summary of the project..."></textarea>
           </div>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn secondary" data-modal-close>Cancel</button>
-        <button type="submit" class="btn primary-colored">Save Changes</button>
+        <button type="submit" class="btn primary-colored">Create Project</button>
       </div>
     </form>
   </div>

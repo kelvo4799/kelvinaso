@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Contact extends Model
 {
-
     protected $fillable = [
         'name',
         'email',
@@ -15,6 +14,15 @@ class Contact extends Model
         'status',
         'replied_at',
         'ip_address',
-        'user_agent'
+        'user_agent',
     ];
+
+    protected $casts = [
+        'replied_at' => 'datetime',
+    ];
+
+    public function replies()
+    {
+        return $this->hasMany(ContactReply::class)->orderBy('created_at', 'asc');
+    }
 }

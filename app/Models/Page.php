@@ -17,6 +17,7 @@ class Page extends Model
     protected function casts(): array
     {
         return [
+            'is_active' => 'boolean',
             'content' => 'json',
         ];
     }
